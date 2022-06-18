@@ -1,0 +1,226 @@
+@import url("https://fonts.googleapis.com/css2?family=Prompt:ital,wght@0,200;0,400;0,500;0,700;0,800;0,900;1,100;1,700;1,800;1,900&display=swap");
+.Nav_Container {
+  position: fixed;
+  left: 0;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  background-color: white;
+  row-gap: 50px;
+  height: 100%;
+  z-index: 100;
+  font-family: "Prompt", sans-serif;
+}
+
+.Nav_Container .Nav_Header img {
+  width: 70px;
+  height: 70px;
+}
+
+.Nav_Container .nav_Link {
+  text-decoration: none;
+}
+
+.Nav_Container .nav_Link .nav_icon {
+  width: 40px;
+  height: 40px;
+}
+
+.Nav_Container .hover_detail {
+  position: absolute;
+  left: 70px;
+  background-color: #354259;
+  color: white;
+  font-weight: 800;
+  width: 200px;
+  height: 50px;
+  border-bottom-right-radius: 25px;
+  border-top-right-radius: 25px;
+  -webkit-animation: fadein 1s ease;
+          animation: fadein 1s ease;
+}
+
+@-webkit-keyframes fadein {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fadein {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.Home__Container {
+  font-family: "Prompt", sans-serif;
+  background-color: #F0F4FA;
+  height: 90vh;
+  width: 100%;
+}
+
+.Home__Container .Summary__Container {
+  background-color: #354259;
+  width: 200px;
+  height: 100px;
+  text-align: center;
+  margin-left: 100px;
+  color: #F0F4FA;
+}
+
+.topnav_Container {
+  position: -webkit-sticky;
+  position: sticky;
+  top: 0;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  width: 100%;
+  z-index: 90;
+  background-color: white;
+}
+
+.topnav_Container .title__header {
+  position: relative;
+  left: 100px;
+}
+
+.topnav_Container .notifi__Container {
+  display: -webkit-inline-box;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  border-radius: 25px;
+  -webkit-transition: .5s;
+  transition: .5s;
+  padding: 10px;
+  cursor: pointer;
+  position: relative;
+  right: 115px;
+}
+
+.topnav_Container .notifi__Container .notifi__Num {
+  position: relative;
+  top: 10px;
+  right: 10px;
+  background-color: red;
+  padding: 10px;
+  border-radius: 50%;
+  height: .5px;
+  width: .5px;
+}
+
+.topnav_Container .notifi__Container:hover {
+  background-color: lightgray;
+}
+
+.topnav_Container .notifi__Container .top_arow {
+  position: absolute;
+  top: 75px;
+  right: 30px;
+  border: solid #354259;
+  border-width: 0 5px 5px 0;
+  padding: 10px;
+  -webkit-transform: rotate(-135deg);
+          transform: rotate(-135deg);
+  background-color: #354259;
+}
+
+@media screen and (max-width: 700px) {
+  .topnav_Container .notifi__Container {
+    right: 65px;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .topnav_Container .notifi__Container {
+    right: 0;
+  }
+}
+
+@media screen and (max-width: 430px) {
+  .topnav_Container .title__header {
+    font-size: 4vw;
+    left: 70px;
+  }
+  .topnav_Container .notifi__Container {
+    right: -20px;
+  }
+  .topnav_Container .notifi__Container .bell_Icon {
+    width: 10vw;
+  }
+}
+
+.Notification__Container {
+  font-family: "Prompt", sans-serif;
+  position: absolute;
+  top: 100px;
+  right: 0;
+  height: 300px;
+  width: 310px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  border-radius: 25px;
+  background-color: #354259;
+  color: white;
+}
+
+.Notification__Container .Notification__Content {
+  width: -webkit-fit-content;
+  width: -moz-fit-content;
+  width: fit-content;
+  padding: 5px;
+  border-bottom: 1px solid white;
+}
+
+.Notification__Container .notifi_title {
+  width: 290px;
+  height: auto;
+  overflow-wrap: break-word;
+  font-size: 20px;
+}
+
+@media screen and (max-width: 700px) {
+  .Notification__Container {
+    width: 200px;
+    right: 5px;
+  }
+  .Notification__Container .notifi_title {
+    font-size: 15px;
+    width: 200px;
+  }
+  .Notification__Container .Notification__Content {
+    padding: 0;
+  }
+}
+
+.Form_Container {
+  background-color: #F0F4FA;
+  height: 90vh;
+}
+/*# sourceMappingURL=style.css.map */
