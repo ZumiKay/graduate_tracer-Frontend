@@ -12,13 +12,9 @@ export const NavIcons = [{
     {
         url: "https://firebasestorage.googleapis.com/v0/b/graduatetracer-f72fa.appspot.com/o/Report.png?alt=media&token=1f367997-8152-4fc4-bbf7-59fcb1cc0bf5",
         name: "Survey & Reports",
-        route: "forms"
+        route: "report"
     },
-    {
-        url: "https://firebasestorage.googleapis.com/v0/b/graduatetracer-f72fa.appspot.com/o/User.png?alt=media&token=437a3d23-f0df-42c4-bf61-77f5962ad56d",
-        name: "Users",
-        route: "users"
-    },
+
 
 ]
 export const Assetimg = {
