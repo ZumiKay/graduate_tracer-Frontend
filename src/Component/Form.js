@@ -125,6 +125,11 @@ export const SurveyItem = (props) => {
       update[index] = {...ctx.surveys[index] , [key]: event.target.value}
       ctx.setsurveys(update)
     } 
+    else if (key === 'gridstyle') {
+      update[index] = {...ctx.surveys[index] , [key]: event.target.value}
+      setgrid(event.target.value)
+      ctx.setsurveys(update)
+    }
     
     else {
       if(event.target.value === 'Shortanswer') {
@@ -185,7 +190,7 @@ export const SurveyItem = (props) => {
           }
         </div>
         <form className="answer__contianer">
-          <div style={gridstyle === 'column' ? {gridTemplateColumns:'auto auto',gridColumnGap:'10px' , width:"45vw"} : {}} className='answer__item'>
+          <div style={ctx.surveys[index].gridstyle === 'column' ? {gridTemplateColumns:'auto auto',gridColumnGap:'10px' , width:"45vw"} : {}} className='answer__item'>
           {ctx.surveys[index] && ctx.surveys[index].Answer.map((ans , index1) => (
             <>
             {ctx.surveys[index]['type'] === 'Checkbox' && <Checkbox id={id} index={index} index1={index1} width={ gridstyle === 'row' ? '40vw' : '20vw'} label={ans}/>}
@@ -204,7 +209,7 @@ export const SurveyItem = (props) => {
           
           <Buttom options={{onClick: (e) => handleClick(e,'options', index)}} style={{width:"100%"}} label={'Add options'}/>
           
-          {ctx.surveys[index].type !== 'Select' && <select value={gridstyle} onChange={(e) => setgrid(e.target.value)} id='display_style' className='form-select form-select-sm' >
+          {ctx.surveys[index].type !== 'Select' && <select value={ctx.surveys[index].gridstyle} onChange={handleChange(index , 'gridstyle')} id='display_style' className='form-select form-select-sm' >
             <option value="row">Row</option>
             <option value="column">Column</option>
           </select>}

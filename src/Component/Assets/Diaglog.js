@@ -103,7 +103,7 @@ export const FormDiaglog = (props) => {
                recieveremail: i ,
                subject: emaildata.subject ,
                message: emaildata.message ,
-               Link: "http://localhost:3000/p/"+ data._id
+               Link: `${env.web_url}/p/${data._id}`
             } , env.public_key)
          })
          seterr("Email Sent") 
@@ -129,7 +129,7 @@ export const FormDiaglog = (props) => {
          </div>
       </div> 
       : 
-      <TextField style={{marginTop:"20px"}} label={'Link'} value={`http://localhost:3000/p/${data._id}`} fullWidth multiline/>
+      <TextField style={{marginTop:"20px"}} label={'Link'} value={`${env.web_url}/p/${data._id}`} fullWidth multiline/>
       }
       <div className='Form_action'>
          <Button onClick={() => ctx.setsend(false)}>Cancel</Button>

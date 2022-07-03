@@ -3,7 +3,7 @@
 import { Routes, Route, useLocation } from "react-router-dom";
 import './App.css';
 import NavBar from "./Component/Assets/NavBar";
-import Form, { SurveyItem } from "./Component/Form";
+import Form from "./Component/Form";
 import Home from "./Component/Home";
 import Authentication from "./Component/Authentication";
 import { useState , useEffect } from "react";
@@ -14,6 +14,7 @@ import Report from "./Component/Report";
 
 import Preview from "./Component/Preview";
 import Usermanagement from "./Component/Usermanagement";
+import { Assetimg } from "./Component/Assets/Image/Images";
 
 
 
@@ -34,10 +35,26 @@ function App() {
       sethide(true)
     }
    getForm()
-   
+   if(window.innerWidth < 500) {
+    sethidenav(true)
+  } else {
+    sethidenav(false)
+  }
+   window.addEventListener("resize" , resizewidth)
+
+   return (() => {
+    window.removeEventListener("resize" , resizewidth)
+   })
     
  
   } , [location.pathname])
+  const resizewidth = () => {
+    if(window.innerWidth < 500) {
+      sethidenav(true)
+    } else {
+      sethidenav(false)
+    }
+  }
   const getForm  = () => {
     axios({
       method:"get",
@@ -53,8 +70,11 @@ function App() {
   return (
     <div className="App">
       
-   {auth?.accessToken ?<>{hide ? <> <NavBar/>
-    </> : <></>} </> : <></>}
+   {auth?.accessToken ? 
+   <>{hide ? <> { 
+   !hidenav ?
+   <NavBar setclose={sethidenav}/> : <img onClick={() => sethidenav(false)} className="Logo_nav" src={Assetimg.Logo} alt="logo" />
+   }</> : <></>} </> : <></>}
      <Routes>
         <Route path="/" element={
         auth?.accessToken ? <PrivateRoute redirectPath={'/'} isAllowed={auth?.accessToken}>

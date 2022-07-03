@@ -9,12 +9,31 @@ import Diaglog, { FormDiaglog } from './Diaglog'
 import { Button } from '@mui/material'
 import { toast } from 'react-toastify'
 
-const NavBar = () => {
+const NavBar = ({setclose}) => {
   const [showdetail , setshowdetail] = useState({})
   const [open , setopen] = useState(false)
+  const [showclose , setshowclose] = useState(false)
   const ctx = useContext(TracerContext)
   let navigate = useNavigate()
   
+  useEffect(() => {
+    closebtn()
+    window.addEventListener('resize' , closebtn) 
+
+
+    return (() => {
+      window.removeEventListener("resize" , closebtn)
+    })
+   
+  } , [])
+  
+  const closebtn = () => {
+    if(window.innerWidth < 500) {
+      setshowclose(true) 
+    } else {
+      setshowclose(false)
+    }
+  }
   const handleLogout = async () => {
     await axios({
       method:"GET",
@@ -32,6 +51,7 @@ const NavBar = () => {
       <header className='Nav_Header'>
         <img onClick={() => console.log(ctx.showactive['Home'])} src={Assetimg.Logo} alt="Logo" />
       </header>
+      {showclose && <Button onClick={() => setclose(true)}>Close</Button>}
       {NavIcons.map(icon => (
        <div>
         {icon.name === 'CreateSurvey' ? 

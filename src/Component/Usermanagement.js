@@ -1,12 +1,15 @@
 import { Button } from '@mui/material'
 import axios from 'axios'
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
+import { TracerContext } from '../context'
 import { env } from '../environment'
 import '../Style/style.css'
 
 const Usermanagement = () => {
+    const ctx = useContext(TracerContext)
     const [users , setuser] = useState([])
     useEffect(() => {
+        ctx.setshowactive({"Users": true})
         getUser()
     } , [])
    const getUser = () => {
@@ -43,7 +46,7 @@ const Usermanagement = () => {
                 <th>Lastname</th>
                 <th>Actions</th>
             </thead>
-            <tbody>
+            <tbody className='usertable_body'>
                 {users.map((user) => (
                      <tr>
                      <td>{user.Email}</td>
@@ -54,7 +57,7 @@ const Usermanagement = () => {
                      </td>
                  </tr>
                 ))}
-               
+                
                
             </tbody>
         </table>

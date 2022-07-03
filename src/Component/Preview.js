@@ -172,7 +172,7 @@ return (
     {data.required && <p style={{color:"#C33F3F"}}>Required</p>}
     <h4 className='survey_question'>{data.Question} </h4>
     
-    <div className="answer_box">
+    <div style={data?.gridstyle === 'column' ? {display:"grid" , gridTemplateColumns:"auto auto" , columnGap:"10px"} : {}} className="answer_box">
       {(data.type === 'Checkbox' || data.type === 'MultipleChoice' || data.type === 'Shortanswer' ) ?  data.Answer.map((ans , index1) => (
         <>
         {data.type === 'Checkbox' && <Checkbox index={index} index1={index1} label={ans}/>}

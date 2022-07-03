@@ -21,6 +21,7 @@ sans-serif;
 .Nav_Container {
     position: fixed;
     padding: 10px;
+    width: 70px;
     left: 0;
     display: flex;
     flex-direction: column;
@@ -53,7 +54,7 @@ sans-serif;
     }
     .hover_detail {
         position: absolute;
-        left: 90px;
+        left: 70px;
         background-color: #354259;
         color: white;
         font-weight: 800;
@@ -73,6 +74,14 @@ sans-serif;
         }
         to {
             opacity: 1;
+        }
+    }
+    @keyframes slidein {
+        from {
+            left: -100px;
+        }
+        to {
+            left: 0;
         }
     }
 }
@@ -573,18 +582,29 @@ sans-serif;
         flex-direction: column;
     }
     animation: fadein .5s ease;
+    @media screen and (max-width:750px) {
+        left: 150px;
+    }
+    @media screen and (max-width:700px) {
+        position: fixed;
+        width: 100%;
+        height: 100%;
+        left: 0;
+        top: 0;
+    }
 }
 
 .Form_DialogContainer {
     position: absolute;
     top: 200px;
-    left: 700px;
+    left: 35%;
     background-color: lightsteelblue;
     width: 500px;
     height: max-content;
     font-family: $Customfonts;
     padding: 10px;
     animation: fadein .5s ease;
+    z-index: 100;
     .nav_bar {
         display: flex;
         flex-direction: row;
@@ -617,16 +637,39 @@ sans-serif;
     .Form_action {
         margin-top: 20px;
     }
+    @media screen and (max-width: 1500px) {
+        left: 30%;
+    }
+    @media screen and (max-width: 800px) {
+        left: 20%;
+    }
+    @media screen and (max-width: 730px) {
+        left: 10%;
+    }
+    @media screen and (max-width: 600px) {
+        left: 15%;
+        width: 400px;
+    }
+    @media screen and (max-width: 500px) {
+        position: fixed;
+        width: 100%;
+        height: 100%;
+        left: 0;
+        top: 0;
+    }
 }
 
 .report__Container {
     width: 100%;
     height: 100vh;
     font-family: $Customfonts;
+    background-color: #F0F4FA;
+    overflow-y: auto;
     .report_header {
         display: flex;
         flex-direction: row;
         justify-content: space-between;
+        align-items: center;
         position: relative;
         top: 20px;
         margin-left: 300px;
@@ -634,6 +677,9 @@ sans-serif;
         @media screen and (max-width: 1400px) {
             margin-left: 150px;
             width: 80%;
+        }
+        @media screen and (max-width: 900px) {
+            width: 700px;
         }
     }
     .table_Container {
@@ -702,7 +748,8 @@ sans-serif;
             display: flex;
             flex-direction: column;
             align-items: flex-start;
-            width: 50%;
+            width: 100%;
+            overflow-y: auto;
         }
         .answerbox_column {
             display: grid;
@@ -753,6 +800,9 @@ sans-serif;
             max-height: 300px;
             overflow-y: auto;
         }
+        @media screen and (max-width: 900px) {
+            width: 90%;
+        }
     }
     animation: fadein .5s ease;
 }
@@ -769,17 +819,21 @@ sans-serif;
 .user_Container {
     font-family: $Customfonts;
     width: 100%;
+    height: 700px;
+    overflow-y: auto;
     h1 {
-        margin-left: 90px;
+        text-align: left;
+        margin-left: 100px;
+        font-weight: 700;
     }
     .user_table {
         position: relative;
         border-collapse: collapse;
-        margin-left: 220px;
+        margin-left: 100px;
         border-spacing: 0;
+        min-width: 700px;
         width: 70%;
         background-color: #F0F4FA;
-        border-radius: 15px;
         margin-bottom: 100px;
         box-shadow: 1px 1px 2px 1px gray;
         .usertable_header {
@@ -788,10 +842,10 @@ sans-serif;
             background-color: #354259;
             color: #F0F4FA;
             height: 50px;
+            font-size: x-large;
             border-bottom: 1px solid black;
         }
-        tbody {
-            max-height: 400px;
+        .usertable_body {
             tr {
                 height: 60px;
                 border-bottom: 1px solid black;
