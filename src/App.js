@@ -13,6 +13,7 @@ import { env } from "./environment";
 import Report from "./Component/Report";
 
 import Preview from "./Component/Preview";
+import Usermanagement from "./Component/Usermanagement";
 
 
 
@@ -21,6 +22,7 @@ import Preview from "./Component/Preview";
 function App() {
   
   const [hide , sethide] = useState(false)
+  const [hidenav , sethidenav] = useState(false)
   const [survey , setsurvey] = useState([])
   const auth = JSON.parse(localStorage.getItem('auth'))
   const location = useLocation()
@@ -32,6 +34,7 @@ function App() {
       sethide(true)
     }
    getForm()
+   
     
  
   } , [location.pathname])
@@ -40,7 +43,8 @@ function App() {
       method:"get",
       url:env.API_URL + "/getform",
       headers: {
-        "x-access-token" : auth?.accessToken 
+        "x-access-token" : auth?.accessToken, 
+        
      }
     }).then((res) => {
       setsurvey(res.data.survey)
@@ -73,7 +77,11 @@ function App() {
           <Report data={survey}/>
         </PrivateRoute>
        }/>
-       
+       <Route exact path="/users" element={
+        <PrivateRoute redirectPath={"/"} isAllowed={auth?.accessToken}>
+          <Usermanagement/>
+        </PrivateRoute>
+       }/>
        
       
       

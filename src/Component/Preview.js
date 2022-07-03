@@ -94,6 +94,7 @@ const handleSubmit = () => {
       
     } 
   })
+ 
   if(count < requireindex) {
     setmess("Please Fill Required Questions")
   } else if (count === requireindex) {

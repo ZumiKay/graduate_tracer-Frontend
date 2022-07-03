@@ -83,12 +83,12 @@ sans-serif;
     align-items: center;
     font-family: $Customfonts;
     height: 100vh;
-    width: 90%;
+    width: 100%;
     row-gap: 50px;
     .AllForm_Container {
         display: flex;
         flex-direction: column;
-        margin-left: 150px;
+        margin-left: 50px;
         row-gap: 20px;
         width: 90%;
         .Box_Container {
@@ -117,13 +117,19 @@ sans-serif;
                 }
             }
         }
+        @media screen and (max-width: 760px) {
+            margin-left: 100px;
+        }
     }
     .Home__Header {
-        margin-left: 100px;
+        margin-left: 50px;
         text-shadow: 2px 1px #354259;
         color: black;
         font-size: 45px;
         font-weight: 500;
+        @media screen and (max-width: 1111px) {
+            margin-left: 80px;
+        }
         @media screen and (max-width: 750px) {
             font-size: 40px;
         }
@@ -147,7 +153,7 @@ sans-serif;
             width: 300px;
             height: 200px;
             text-align: center;
-            margin-left: 100px;
+            margin-left: 50px;
             color: #F0F4FA;
             border-radius: 25px;
             transition: .5s;
@@ -159,6 +165,9 @@ sans-serif;
                 background-color: white;
                 border: 2px solid #354259;
                 color: black;
+            }
+            @media screen and (max-width: 760px) {
+                margin-left: 100px;
             }
             @media screen and (max-width:730px) {
                 width: 250px;
@@ -656,11 +665,11 @@ sans-serif;
             }
         }
         .table_body {
-            height: 700px;
+            max-height: 700px;
             overflow-y: scroll;
             tr {
-                font-size: larger;
                 height: 100px;
+                font-size: larger;
                 border-bottom: 1px solid black;
             }
         }
@@ -754,5 +763,39 @@ sans-serif;
     }
     to {
         opacity: 1;
+    }
+}
+
+.user_Container {
+    font-family: $Customfonts;
+    width: 100%;
+    h1 {
+        margin-left: 90px;
+    }
+    .user_table {
+        position: relative;
+        border-collapse: collapse;
+        margin-left: 220px;
+        border-spacing: 0;
+        width: 70%;
+        background-color: #F0F4FA;
+        border-radius: 15px;
+        margin-bottom: 100px;
+        box-shadow: 1px 1px 2px 1px gray;
+        .usertable_header {
+            position: sticky;
+            top: 0;
+            background-color: #354259;
+            color: #F0F4FA;
+            height: 50px;
+            border-bottom: 1px solid black;
+        }
+        tbody {
+            max-height: 400px;
+            tr {
+                height: 60px;
+                border-bottom: 1px solid black;
+            }
+        }
     }
 }

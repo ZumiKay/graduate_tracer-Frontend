@@ -1,7 +1,5 @@
 import React, { useContext, useEffect } from 'react'
 import { TracerContext } from '../context'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { regular, solid} from '@fortawesome/fontawesome-svg-core/import.macro' 
 import '../Style/style.css'
 import { Link } from 'react-router-dom'
 const Home = ({survey}) => {
@@ -16,12 +14,10 @@ const Home = ({survey}) => {
         <h1 className='Home__Header'>Welcome To Graduate Tracer Survey System</h1>
         <section className="Summary__Section">
         <div style={{cursor:"none"}} className="Summary__Container">
-          <h1 className='Summary__header'>10</h1>
+          <h1 className='Summary__header'>{survey.length}</h1>
           <p>Survey Created</p>
         </div>
-        {/* <div className="Summary__Container">
-          <FontAwesomeIcon icon={solid('plus')} size={'5x'}/>
-        </div> */}
+       
         </section>
         <hr className='Line' />
         <div className='AllForm_Container'>

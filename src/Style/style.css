@@ -114,7 +114,7 @@
           align-items: center;
   font-family: "Prompt", sans-serif;
   height: 100vh;
-  width: 90%;
+  width: 100%;
   row-gap: 50px;
 }
 
@@ -126,7 +126,7 @@
   -webkit-box-direction: normal;
       -ms-flex-direction: column;
           flex-direction: column;
-  margin-left: 150px;
+  margin-left: 50px;
   row-gap: 20px;
   width: 90%;
 }
@@ -178,12 +178,24 @@
   border: 1px solid black;
 }
 
+@media screen and (max-width: 760px) {
+  .Home__Container .AllForm_Container {
+    margin-left: 100px;
+  }
+}
+
 .Home__Container .Home__Header {
-  margin-left: 100px;
+  margin-left: 50px;
   text-shadow: 2px 1px #354259;
   color: black;
   font-size: 45px;
   font-weight: 500;
+}
+
+@media screen and (max-width: 1111px) {
+  .Home__Container .Home__Header {
+    margin-left: 80px;
+  }
 }
 
 @media screen and (max-width: 750px) {
@@ -233,7 +245,7 @@
   width: 300px;
   height: 200px;
   text-align: center;
-  margin-left: 100px;
+  margin-left: 50px;
   color: #F0F4FA;
   border-radius: 25px;
   -webkit-transition: .5s;
@@ -249,6 +261,12 @@
   background-color: white;
   border: 2px solid #354259;
   color: black;
+}
+
+@media screen and (max-width: 760px) {
+  .Home__Container .Summary__Section .Summary__Container {
+    margin-left: 100px;
+  }
 }
 
 @media screen and (max-width: 730px) {
@@ -990,13 +1008,13 @@
 }
 
 .report__Container .table_Container .table_body {
-  height: 700px;
+  max-height: 700px;
   overflow-y: scroll;
 }
 
 .report__Container .table_Container .table_body tr {
-  font-size: larger;
   height: 100px;
+  font-size: larger;
   border-bottom: 1px solid black;
 }
 
@@ -1131,5 +1149,46 @@
   to {
     opacity: 1;
   }
+}
+
+.user_Container {
+  font-family: "Prompt", sans-serif;
+  width: 100%;
+}
+
+.user_Container h1 {
+  margin-left: 90px;
+}
+
+.user_Container .user_table {
+  position: relative;
+  border-collapse: collapse;
+  margin-left: 220px;
+  border-spacing: 0;
+  width: 70%;
+  background-color: #F0F4FA;
+  border-radius: 15px;
+  margin-bottom: 100px;
+  -webkit-box-shadow: 1px 1px 2px 1px gray;
+          box-shadow: 1px 1px 2px 1px gray;
+}
+
+.user_Container .user_table .usertable_header {
+  position: -webkit-sticky;
+  position: sticky;
+  top: 0;
+  background-color: #354259;
+  color: #F0F4FA;
+  height: 50px;
+  border-bottom: 1px solid black;
+}
+
+.user_Container .user_table tbody {
+  max-height: 400px;
+}
+
+.user_Container .user_table tbody tr {
+  height: 60px;
+  border-bottom: 1px solid black;
 }
 /*# sourceMappingURL=style.css.map */

@@ -12,6 +12,9 @@ import Response from './Response'
 const Report = ({data}) => {
   const ctx = useContext(TracerContext)
   const [showreport , setreport] = useState({})
+  const [search , setsearch] = useState('')
+  const [filterdata , setfilterdata] = useState([])
+  const [filter, setfilter] = useState(false)
   useEffect(() => {
     let obj = {}
     ctx.setshowactive({[NavIcons[2].name]:true})
@@ -33,13 +36,31 @@ const Report = ({data}) => {
     })
    
   }
+  const handleFilter = (e) => {
+    const value = e.target.value
+    setfilter(true)
+    let temp = data?.filter((i) => {
+      if(value === '')
+      {
+        setfilter(false)
+      } else if (i.title.toLowerCase().includes(value.toLowerCase()))
+      {
+        return i.title
+      } 
+      return ''
+    })
+    setfilterdata(temp)
+   
+
+  }
   return (
     <>
     <ToastContainer/>
+    
     <div className='report__Container'>
       <div className="report_header">
         <h3>Report</h3>
-        <TextField label={"Search"}/>
+        <TextField onChange={handleFilter} label={"Search"}/>
       </div>
       
       <table className='table_Container'>
@@ -50,7 +71,8 @@ const Report = ({data}) => {
           <th>ACTIONS</th>
         </thead>
         <tbody className='table_body'>
-          {data.map((item) => (
+         
+          {(filter ? filterdata : data).map((item) => (
             <>
             <tr>
             <td>{item.title}</td>
