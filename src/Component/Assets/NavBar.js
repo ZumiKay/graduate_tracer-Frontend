@@ -153,7 +153,7 @@ export const Topnavbar = ({data}) => {
             }
             
         }
-        }} contentEditable={true} onBlur={() => {
+        }} contentEditable={env.auth && env.auth.accessToken ? true : false} onBlur={() => {
            
           axios({
             method:"PUT",

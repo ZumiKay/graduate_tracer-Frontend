@@ -1,6 +1,6 @@
 import { FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import {solid} from '@fortawesome/fontawesome-svg-core/import.macro' 
-import { Box, Button, LinearProgress, TextField } from '@mui/material'
+import { Box, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, FormControl, InputLabel, LinearProgress, MenuItem, Select, TextField } from '@mui/material'
 import axios from 'axios'
 import React, { useContext, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
@@ -8,6 +8,7 @@ import { TracerContext } from '../../context'
 import { env } from '../../environment'
 import emailjs from '@emailjs/browser';
 import "../../Style/style.css"
+import { toast } from 'react-toastify'
 const Diaglog = ({open}) => {
    const ctx = useContext(TracerContext)
    const [formtitle , setform] = useState('')
@@ -70,6 +71,7 @@ export const FormDiaglog = (props) => {
    const {data} = props 
    const ctx = useContext(TracerContext)
    const [select, setselect] = useState('')
+   const [usr , setusr] = useState([])
    const [emaildata , setdata] = useState({
     reciever: '' ,
     subject: '' , 
@@ -80,18 +82,29 @@ export const FormDiaglog = (props) => {
       setselect(key)
    }
    useEffect(() => {
+      getstudent()
       setselect('email')
    } , [])
+   const getstudent = () => {
+      axios({
+         method:"GET",
+         url:env.API_URL + "/getstudent" ,
+         headers: {"x-access-token" : env.auth.accessToken}
+      }).then(res => setusr(res.data.student))
+   }
    
-   const handleChange = (e) => {
-      if(e.target.id === 'reciever'){
-         setdata({...emaildata , [e.target.id]:e.target.value.replace(/ /g, "").split(',')})
+   const handleChange =(type , e) => {
+     
+      if(type === 'reciever'){
+         console.log("Change")
+        setdata({...emaildata , [type]:usr.filter(({name}) => name === e.target.value).map(i => i.email)})
       } else {
-         setdata({...emaildata , [e.target.id]:e.target.value})
+         setdata({...emaildata , [type]:e.target.value})
       }
 
    }
-   const handleSend = async () => {
+   const handleSend = async() => {
+     
       ctx.setisloading({...ctx.isloading , send:true})
       if(emaildata.reciever === '' || emaildata.subject === '' || emaildata.message === ''){
          ctx.setisloading({...ctx.isloading , send:false})
@@ -99,12 +112,17 @@ export const FormDiaglog = (props) => {
       } else {
          seterr('')
          await emaildata.reciever?.forEach(i => {
-            emailjs.send(env.service_id , env.template_id , {
-               recieveremail: i ,
-               subject: emaildata.subject ,
-               message: emaildata.message ,
-               Link: `${env.web_url}/p/${data._id}`
-            } , env.public_key)
+            i.map(j => 
+               emailjs.send(env.service_id , env.template_id , {
+                  recieveremail: j ,
+                  subject: emaildata.subject ,
+                  message: emaildata.message ,
+                  Link: `${env.web_url}/p/${data._id}`
+               } , env.public_key)
+               
+               
+               )
+           
          })
          ctx.setisloading({...ctx.isloading , send:false})
          seterr("Email Sent") 
@@ -112,6 +130,7 @@ export const FormDiaglog = (props) => {
    }
    return (
    <div className='Form_DialogContainer'>
+     
       {ctx.isloading.send && <Box sx={{width:"100%"}}>
          <LinearProgress/>
       </Box>}
@@ -126,9 +145,14 @@ export const FormDiaglog = (props) => {
       <div className='email__container'>
          <h5>Email</h5>
          <div>
-         <TextField id='reciever' onChange={handleChange} type={'text'} label={"To"} fullWidth/>
-         <TextField id='subject' onChange={handleChange} type={'text'} label={"Subject"} fullWidth/>
-         <TextField id="message" onChange={handleChange} type={'text'} label={"Message"} multiline fullWidth/>
+         <FormControl fullWidth>
+            <InputLabel>Group Students</InputLabel>
+            <Select id='reciever' onChange={(e) => handleChange('reciever', e)} label='studentgroup'>
+              {usr.map(i => <MenuItem value={i.name}>{i.name}</MenuItem>)}
+            </Select>
+         </FormControl>
+         <TextField id='subject' onChange={(e) => handleChange('subject' , e)} type={'text'} label={"Subject"} fullWidth/>
+         <TextField id="message" onChange={(e) => handleChange('message' , e)} type={'text'} label={"Message"} multiline fullWidth/>
          </div>
       </div> 
       : 
@@ -144,4 +168,105 @@ export const FormDiaglog = (props) => {
    
    </div>)
 
+}
+
+export const AddStudents = ({open , setOpen , data}) => {
+   const [studentdata , setdata] = useState({
+      name: data ? data.name : '',
+      email: data ? data.email : '',
+   })
+   const [err , errmes] = useState('')
+  
+    const handleClose = () => {
+      setOpen(false);
+    };
+    const handleChange = (type) => e => {
+       if(type === 'name') {
+         setdata({...studentdata , name:e.target.value})
+       } else {
+         setdata({...studentdata , email:e.target.value.replace(/ /g, "").split(',')})
+       }
+    }
+    const handleSubmit = () => {
+      if(!data) {
+         if(studentdata.name !== '' && studentdata.email !== '') {
+         
+            axios({
+               method:"POST" ,
+               url: env.API_URL + "/register",
+               data:studentdata , 
+               headers:{"x-access-token" : env.auth.accessToken}
+            }).then(() => {
+               toast.success("Group Added" , {
+                  autoClose: 2000,
+                  pauseOnHover:true,
+                  onClose: () => window.location.reload()
+               })
+            }).catch((err) => {
+               errmes(err.response.data.message)
+            })
+   
+         } else {
+            errmes("Please fill All Field")
+         }
+
+      } else {
+         axios({
+            method:"PUT" ,
+            url:env.API_URL + "/updatestudent",
+            data: {
+               id:data._id ,
+               user:studentdata 
+            } ,
+            headers:{"x-access-token" : env.auth.accessToken}
+         }).then(() => {
+            toast.success("Updated Successful" , {
+               autoClose:2000,
+               pauseOnHover:true,
+               onClose:() => window.location.reload()
+            })
+         }).catch((err) => {
+            console.log(err)
+         })
+
+      }
+      
+      
+    }
+
+   return (
+      <div>
+         <Dialog
+         open={open}
+         onClose={handleClose}
+
+         >
+            <DialogTitle>
+                  Add Students Email
+               </DialogTitle>
+               
+            <DialogContent>
+               <p style={{color:"red"}}>{err}</p>
+               
+               <DialogContentText>
+                  GroupName
+               </DialogContentText>
+               <TextField value={studentdata.name} onChange={handleChange('name')} type={'text'} label={"Name"}/>
+               <DialogContentText>
+                  Emails (Sperate by Comma (a,b,c,...))
+               </DialogContentText>
+               <textarea onChange={handleChange('email')} value={studentdata.email.toString()} style={{width: '500px'}}/>
+               
+              
+            </DialogContent>
+            <DialogActions>
+               <Button onClick={handleClose}>Close</Button>
+               <Button onClick={() => handleSubmit()}>ADD</Button>
+            </DialogActions>
+
+
+         </Dialog>
+
+      </div>
+   )
 }
