@@ -12,7 +12,6 @@ import Response from './Response'
 const Report = ({data}) => {
   const ctx = useContext(TracerContext)
   const [showreport , setreport] = useState({})
-  const [search , setsearch] = useState('')
   const [filterdata , setfilterdata] = useState([])
   const [filter, setfilter] = useState(false)
   useEffect(() => {
@@ -57,6 +56,7 @@ const Report = ({data}) => {
     <>
     <ToastContainer/>
     
+    
     <div className='report__Container'>
       <div className="report_header">
         <h3>Report</h3>
@@ -82,7 +82,7 @@ const Report = ({data}) => {
                 setreport({...showreport , [item.title]:true})
               }}>View</Button>
             </td>
-            <td>{item.createdAt}</td>
+            <td>{new Date(item.createdAt).toISOString().slice(0, 19)}</td>
             <td>
               <Button onClick={()=> handleDelete(item._id)}>Delete</Button>
             </td>

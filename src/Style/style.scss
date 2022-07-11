@@ -25,12 +25,29 @@ sans-serif;
     left: 0;
     display: flex;
     flex-direction: column;
-    align-items: center;
+    align-items: flex-start;
     background-color: #F0F4FA;
     row-gap: 50px;
     height: 100%;
     z-index: 100;
     font-family: $Customfonts;
+    transition: .4s;
+    overflow-y: hidden;
+    &:hover,
+    &:active {
+        width: 220px;
+        .Nav_Header {
+            left: 50px;
+        }
+        .navLink_Container {
+            .title_Link {
+                width: 150px;
+                text-align: left;
+                // animation: fadein 3.5s ease;
+                display: block;
+            }
+        }
+    }
     .create_Link {
         cursor: pointer;
         img {
@@ -39,14 +56,40 @@ sans-serif;
         }
     }
     .Nav_Header {
+        position: relative;
+        left: -15px;
+        transition: .5s;
         img {
             width: 70px;
             height: 70px;
         }
     }
+    .navLink_Container {
+        display: flex;
+        flex-direction: row;
+        height: fit-content;
+        .title_Link {
+            display: none;
+            position: relative;
+            left: 10px;
+            top: 13.5px;
+            font-weight: 500;
+            cursor: pointer;
+            &:hover {
+                color: lightsteelblue;
+            }
+        }
+        .nav_Link {
+            cursor: pointer;
+            text-decoration: none;
+            .nav_icon {
+                width: 40px;
+                height: 40px;
+            }
+        }
+    }
     .nav_Link {
         cursor: pointer;
-        text-decoration: none;
         .nav_icon {
             width: 40px;
             height: 40px;
@@ -148,7 +191,7 @@ sans-serif;
     }
     .Summary__Section {
         display: flex;
-        flex-direction: row;
+        flex-direction: column;
         justify-content: space-evenly;
         flex-wrap: wrap;
         row-gap: 20px;
@@ -183,6 +226,54 @@ sans-serif;
                 height: 150px;
             }
         }
+    }
+}
+
+.loading__Screen {
+    position: absolute;
+    top: 20%;
+    left: 45%;
+    z-index: 150;
+    p {
+        font-size: x-large;
+        font-weight: 700;
+    }
+    .loading_img {
+        position: relative;
+        animation-duration: 1s;
+        animation-iteration-count: infinite;
+        transform-origin: bottom;
+        top: 0;
+        width: 200px;
+        animation: bounceup 1s linear infinite;
+    }
+    .bounce7 {
+        animation-name: bounce-7;
+        animation-timing-function: cubic-bezier(0.280, 0.840, 0.420, 1);
+    }
+}
+
+@keyframes bounce-7 {
+    0% {
+        transform: scale(1, 1) translateY(0);
+    }
+    10% {
+        transform: scale(1.1, .9) translateY(0);
+    }
+    30% {
+        transform: scale(.9, 1.1) translateY(-100px);
+    }
+    50% {
+        transform: scale(1.05, .95) translateY(0);
+    }
+    57% {
+        transform: scale(1, 1) translateY(-7px);
+    }
+    64% {
+        transform: scale(1, 1) translateY(0);
+    }
+    100% {
+        transform: scale(1, 1) translateY(0);
     }
 }
 
@@ -383,6 +474,9 @@ sans-serif;
             background-color: lightgray;
         }
         .dropdown__Options {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
             text-align: left;
         }
     }
@@ -788,6 +882,11 @@ sans-serif;
     width: 100%;
     background-color: rgb(201, 229, 238);
     row-gap: 20px;
+    .response_btn {
+        display: flex;
+        flex-direction: row;
+        column-gap: 100px;
+    }
     .responseitem__Container {
         background-color: #F0F4FA;
         width: 50%;
@@ -849,6 +948,37 @@ sans-serif;
             tr {
                 height: 60px;
                 border-bottom: 1px solid black;
+            }
+        }
+    }
+}
+
+.response__table {
+    width: 70%;
+    .table__Container {
+        background-color: #354259;
+        width: 100%;
+        border-collapse: collapse;
+        color: white;
+        thead {
+            position: sticky;
+            top: 0;
+            th {
+                width: fit-content;
+                padding: 15px;
+            }
+        }
+        tbody {
+            tr {
+                height: fit-content;
+                background-color: #F0F4FA;
+                color: black;
+                border-bottom: 1px solid #354259;
+                td {
+                    height: 100px;
+                    max-height: 500px;
+                    overflow-y: auto;
+                }
             }
         }
     }

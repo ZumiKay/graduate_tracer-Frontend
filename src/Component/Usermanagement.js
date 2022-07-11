@@ -4,6 +4,7 @@ import React, { useContext, useEffect, useState } from 'react'
 import { TracerContext } from '../context'
 import { env } from '../environment'
 import '../Style/style.css'
+import { LoadingLogo } from './Home'
 
 const Usermanagement = () => {
     const ctx = useContext(TracerContext)
@@ -13,6 +14,7 @@ const Usermanagement = () => {
         getUser()
     } , [])
    const getUser = () => {
+    ctx.setisloading({...ctx.isloading , user:true})
     axios({
         method:"GET",
         url:env.API_URL + "/getstudent",
@@ -20,11 +22,13 @@ const Usermanagement = () => {
             "x-access-token": env.auth.accessToken
         }
     }).then(res => {
+        ctx.setisloading({...ctx.isloading , user:false})
         setuser(res.data.student)
     })
    
    } 
    const handleDelete = (id) => {
+    ctx.setisloading({...ctx.isloading , user:true})
     axios({
         method:"delete" ,
         url: env.API_URL + "/deletestudent",
@@ -34,10 +38,14 @@ const Usermanagement = () => {
         headers:{
             "x-access-token": env.auth.accessToken
         }
-    }).then(() => window.location.reload())
+    }).then(() => {
+        
+        window.location.reload()})
 }
   return (
-    <div className='user_Container'>
+    <>
+    {ctx.isloading.user && <LoadingLogo/>}
+    <div style={ctx.isloading.user ? {opacity:".5"} : {opacity:"1"}} className='user_Container'>
         <h1>List of Users</h1>
         <table className='user_table'>
             <thead className='usertable_header'>
@@ -62,6 +70,7 @@ const Usermanagement = () => {
             </tbody>
         </table>
     </div>
+    </>
   )
 }
 

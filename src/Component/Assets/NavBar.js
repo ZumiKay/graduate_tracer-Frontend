@@ -10,7 +10,7 @@ import { Button } from '@mui/material'
 import { toast } from 'react-toastify'
 
 const NavBar = ({setclose}) => {
-  const [showdetail , setshowdetail] = useState({})
+  
   const [open , setopen] = useState(false)
   const [showclose , setshowclose] = useState(false)
   const ctx = useContext(TracerContext)
@@ -47,45 +47,42 @@ const NavBar = ({setclose}) => {
   
 
   return (
+    <>
     <div className='Nav_Container'>
       <header className='Nav_Header'>
-        <img onClick={() => console.log(ctx.showactive['Home'])} src={Assetimg.Logo} alt="Logo" />
+        <img onClick={() => navigate('/' , {replace:true})} src={Assetimg.Logo} alt="Logo" />
       </header>
       {showclose && <Button onClick={() => setclose(true)}>Close</Button>}
       {NavIcons.map(icon => (
-       <div>
-        {icon.name === 'CreateSurvey' ? 
-        <p onClick={() => setopen(true)} className='create_Link' onMouseOver={() => setshowdetail({...showdetail , [icon.name]: true})} onMouseLeave={() => setshowdetail({...showdetail , [icon.name]: false})}>
+       <div className='navLink_Container'>
+       { icon.name !== 'CreateSurvey' ? <Link className='nav_Link' to={'/' + icon.route}>
         <img style={ctx.showactive[icon.name] ? {filter:'grayscale(1)'} : {filter:'grayscale(0)'}  } className='nav_icon' src={icon.url} alt={icon.name}/>
-        </p> :
-        <>
-        <Link onClick={() => {
-          if(icon.name === 'CreateSurvey') {
-            ctx.setshowdialog(true)
-            
+        </Link> : <div onClick={() => setopen(true)} className='nav_Link'>
+        <img style={ctx.showactive[icon.name] ? {filter:'grayscale(1)'} : {filter:'grayscale(0)'}  } className='nav_icon' src={icon.url} alt={icon.name}/>
+          </div>}
+        <p onClick={() => {
+          if(icon.name !== 'CreateSurvey') {
+            navigate(`/${icon.route}` , {replace:true})
+
+          } else {
+            setopen(true)
           }
-        }} onMouseOver={() => setshowdetail({...showdetail , [icon.name]: true})} onMouseLeave={() => setshowdetail({...showdetail , [icon.name]: false})} className='nav_Link' to={'/' + icon.route}>
-        <img style={ctx.showactive[icon.name] ? {filter:'grayscale(1)'} : {filter:'grayscale(0)'}  } className='nav_icon' src={icon.url} alt={icon.name}/>
-        </Link></>
-       
-      }
-      {showdetail[icon.name] ?  <span style={ icon.name === "CreateSurvey" ? {top:"220px"} : {}} className='hover_detail'> <p> {icon.name} </p> </span> : ''}
-      
-    </div>
-       
+          }} className='title_Link'>{icon.name}</p>
+        </div>
       ))}
       <hr />
-      <div onClick={() => handleLogout()}  className='nav_Link'>
-      <img className='nav_icon' src={Assetimg.Logout} alt={'Logout'}/>
-      </div>
-      {open && <Diaglog open={setopen}/>}
-      
-      
-     
-     
-     
-      
-    </div>
+      <div className='navLink_Container'>
+        <div onClick={() => {
+         handleLogout()
+        }} className='nav_Link' to={'/'}>
+        <img  className='nav_icon' src={Assetimg.Logout} alt={'Logout'}/>
+        
+        </div>
+        <p onClick={() => handleLogout()} className='title_Link'>LogOut</p>
+        </div>
+  </div>
+    {open && <Diaglog open={setopen}/>}
+      </>
   ) 
 }
 
@@ -106,6 +103,7 @@ export const Topnavbar = ({data}) => {
   
    } , [data, location.pathname])
    const handleSave = () => {
+    ctx.setisloading({...ctx.isloading , save:true})
     ctx.setedit(false)
     axios({
       method:"PUT" ,
@@ -119,6 +117,7 @@ export const Topnavbar = ({data}) => {
         content: ctx.surveys
       }
     }).then(() => {
+      ctx.setisloading({...ctx.isloading , save:false})
       toast.info("Saved" , {
         position:"top-right",
         autoClose:1000,

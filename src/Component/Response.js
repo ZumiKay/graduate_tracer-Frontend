@@ -4,8 +4,11 @@ import React, { useState } from 'react'
 import { useEffect } from 'react'
 import { env } from '../environment'
 import '../Style/style.css'
+import TableView from './TableView'
 const Response = ({data , close , showreport}) => {
     const [useranswer , setanswer] = useState([])
+    const [tabledata , setdata] = useState([])
+    const [showtable , setshowtable] = useState(false)
     useEffect(() => {
         getAnswer()
     } , [data])
@@ -15,11 +18,15 @@ const Response = ({data , close , showreport}) => {
             url:env.API_URL + "/getanswer/" + data._id,
             headers:{"x-access-token": env.auth.accessToken}
         }).then((res) => {
+            console.log(res.data.answer)
+            setdata(res.data.answer)
             let obj = []
             data.contents.forEach((item) => {
                obj.push(
                 {
+                    
                     Question: item.Question ,
+                    type: item.type,
                     Ans: res.data.answer.map(ans => {
                     return ans.Responses !== [] && ans.Responses.filter(({Question}) => Question === item.Question).map(i => {
                         return i.response
@@ -33,12 +40,16 @@ const Response = ({data , close , showreport}) => {
     }
   return (
     <div className='response__Container'>
+       
         <h1>{data.title}</h1>
+        <div className='response_btn'>
+        {showtable ? <Button onClick={() => setshowtable(false)}>Back</Button> : <Button variant="contained" onClick={() => setshowtable(true)}>Table View</Button>}
         <Button variant='contained' onClick={() => close({...showreport , [data.title]:false})}>Close</Button>
-        {data.contents.map((item) => (
+        </div>
+        {!showtable ?  data.contents.map((item) => (
              <Responseitem data={item} answer={useranswer}/>
-
-        ))}
+        
+        )   ) : (<TableView data={data} answers={tabledata}/>)}
        
         
     </div>
@@ -51,6 +62,7 @@ export default Response
 const Responseitem = ({data , answer}) => {
     const [user , setuser] = useState([])
     const [shoranswer , setshort] = useState([])
+    const [year , setyear] = useState([])
     const [checkbox , setcheckbox] = useState([])
     useEffect(() => {
        initail()
@@ -58,27 +70,35 @@ const Responseitem = ({data , answer}) => {
     const initail = () => {
         let count = {}
         let Answer = []
+        let year = []
         let check = []
         let check1 = []
         let ans = answer.filter(({Question}) => Question === data.Question)
         ans.forEach((i) => {
             i.Ans.map(i => i.map(j => check.push(j)))
             data.Answer.forEach((item , index) => {
-                if(data.type !== 'Checkbox' && data.type !== 'Shortanswer') {
+                if(data.type !== 'Checkbox' && data.type !== 'Shortanswer' && data.type !== 'YearPicker') {
                     if(i.Ans.toString().includes(item)) {
                        count[item] = i.Ans.filter((i) => i.toString() === item).length
                     }
                 }
                 else if (data.type === 'Shortanswer') {
                     i.Ans.map(i => Answer.push(i))
-                } else {
-                   check1.push(((check.map(i => i.filter((j) => j[`ans${index}`]?.isChecked === true))).filter(k => k.length !== 0)).length)
+                }
+                else if (data.type === 'YearPicker') {
+                    i.Ans.map(i  => year.push(i))
+                }
+                
+                else {
+                   check1.push(((check?.map(i => i.filter((j) => j[`ans${index}`]?.isChecked === true))).filter(k => k.length !== 0)).length)
                 }
 
             })
         })
+        
         setuser(count)
         setshort(Answer)
+        setyear(year)
         setcheckbox(check1)
     }
 
@@ -109,6 +129,16 @@ const Responseitem = ({data , answer}) => {
                     return ''
                 }} 
             )}
+            {data.type === 'YearPicker' && year.map((item) => {
+                if(item.toString() !== '') {
+                    return (
+                        <li>{item}</li>
+                    )
+                } else {
+                    return ''
+                }
+            })
+            }
             
             </ul>
            

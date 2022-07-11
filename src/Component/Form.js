@@ -3,13 +3,14 @@ import React, { useContext, useEffect, useRef, useState } from 'react'
 import { TracerContext } from '../context'
 import '../Style/style.css'
 import Buttom from './Assets/Buttom'
-import Checkbox, { RadioButton, SelectAnswer } from './Assets/Checkbox'
+import Checkbox, { RadioButton, Yearpicker} from './Assets/Checkbox'
 import { solid } from '@fortawesome/fontawesome-svg-core/import.macro'
 
 import { Topnavbar } from './Assets/NavBar'
-import { alpha, FormControl, FormControlLabel, styled, Switch } from '@mui/material'
+import { alpha, FormControl, FormControlLabel, styled, Switch, TextField } from '@mui/material'
 import { pink } from '@mui/material/colors'
 import { ToastContainer } from 'react-toastify'
+import { LoadingLogo } from './Home'
 
 
 const Form = ({data}) => {
@@ -43,11 +44,18 @@ const Form = ({data}) => {
     <>
     <ToastContainer/>
     <Topnavbar data={data}/>
-    <div style={(ctx.showdialog || ctx.showsend) ? {opacity: ".5"} : {opacity:"1"}} className='Form_Container'>
     
+    {ctx.isloading.save && <LoadingLogo/>}
+    <div style={(ctx.showdialog || ctx.showsend || ctx.isloading.save) ? {opacity: ".5"} : {opacity:"1"}} className='Form_Container'>
+    
+     
+    
+     {ctx.surveys.map((item , index) => {
       
-    
-     {ctx.surveys.map((item , index) => <SurveyItem id={data._id}  index={index}/> )}
+     return <SurveyItem id={data._id}  index={index}/>
+     
+     } )}
+     
      <Buttom options={{onClick: () => {
       handleClick()
      }}} label={'New Question'}
@@ -132,13 +140,18 @@ export const SurveyItem = (props) => {
     }
     
     else {
-      if(event.target.value === 'Shortanswer') {
-        const answer = {
-          Question: update[index]['Question'],
-          type: event.target.value,
-          Answer: ['Option 1']
-        }
-        update[index] = answer
+      if(event.target.value === 'Shortanswer' || event.target.value === 'YearPicker') {
+        update.map((i , index3) => {
+          if(i.belongTo) {
+            if(i.belongTo.qindex === index){
+              console.log(index3)
+              update.splice(index + 1 , update[index].Answer.length)
+              
+            }
+          }
+          
+        }) 
+        update[index] = {...update[index] , [key]:event.target.value , Answer:['Option 1']}
         ctx.setsurveys(update)
       } else {
       update[index] = {...ctx.surveys[index] , [key]:event.target.value}
@@ -153,21 +166,41 @@ export const SurveyItem = (props) => {
   }
   const handleDelete = (index) => {
     const survey = [...ctx.surveys]
+    survey.map((i , index3) => {
+      if(i.belongTo) {
+        if(i.belongTo.qindex === index){
+         
+          survey.splice(index + 1 , survey[index].Answer.length)
+          
+        }
+      }
+      
+    }) 
     survey.splice(index , 1)
     ctx.setsurveys(survey)
     ctx.setedit(true)
+  }
+  const handleDeleteDropdown = (index1) => {
+    ctx.setedit(true)
+    const surveys = [...ctx.surveys] 
+    
+    surveys[index].Answer.splice(index1 , 1)
+    ctx.setsurveys(surveys)
   }
 
   const Selectlist = ({ans , index1}) => {
     const listref = useRef()
     
     return (
+      <>
       <li ref={listref} contentEditable onBlur={() => {
         const surveys = [...ctx.surveys]
         surveys[index].Answer[index1] = listref.current.innerHTML
         ctx.setsurveys(surveys)
         ctx.setedit(true)
       }}>{ans}</li>
+      <span onClick={() => handleDeleteDropdown(index1)}><FontAwesomeIcon icon={solid('multiply')}/></span> 
+      </>
 
     )
   }
@@ -184,6 +217,7 @@ export const SurveyItem = (props) => {
             <option value="MultipleChoice">Multiple Choice</option>
             <option value="Shortanswer">Short Answer</option>
             <option value="Select">Dropdown</option>
+            <option value="YearPicker">YearPicker</option>
           </select>
           <FontAwesomeIcon onClick={() => handleDelete(index)} icon={solid('trash')}/>
           </>
@@ -194,18 +228,20 @@ export const SurveyItem = (props) => {
           {ctx.surveys[index] && ctx.surveys[index].Answer.map((ans , index1) => (
             <>
             {ctx.surveys[index]['type'] === 'Checkbox' && <Checkbox id={id} index={index} index1={index1} width={ gridstyle === 'row' ? '40vw' : '20vw'} label={ans}/>}
-              {  ctx.surveys[index]['type'] === 'MultipleChoice' && <RadioButton id={id} index1={index1} index={index} label={ans}/>}
-              {ctx.surveys[index]['type'] === 'Shortanswer' && <input className='shortanswer' placeholder='Answer' type={'text'}/>}
+              {ctx.surveys[index]['type'] === 'MultipleChoice' && <RadioButton id={id} index1={index1} index={index} label={ans}/>}
+              {ctx.surveys[index]['type'] === 'Shortanswer' && <TextField label={'Shortanswer'} fullWidth/>}
               {ctx.surveys[index]['type'] === 'Select' && 
               <ul className='dropdown__Options'>
                 <Selectlist ans={ans} index1={index1}/>
                 </ul>}
+              {ctx.surveys[index]['type'] === 'YearPicker' && <Yearpicker/>}  
+                
             </>
           ) ) } 
           </div>
           {showedit &&
           <div className="actions">
-          {ctx.surveys[index] && ctx.surveys[index].type !== 'Shortanswer' && <>
+          {ctx.surveys[index] && ctx.surveys[index].type !== 'Shortanswer' && ctx.surveys[index].type !== 'YearPicker' && <>
           
           <Buttom options={{onClick: (e) => handleClick(e,'options', index)}} style={{width:"100%"}} label={'Add options'}/>
           
@@ -215,17 +251,21 @@ export const SurveyItem = (props) => {
           </select>}
           </>
           } 
+          {!ctx.surveys[index]?.belongTo && 
           <FormControl component="fieldset" variant="standard">
-            <FormControlLabel
-            control={<RedSwitch checked={ctx.surveys[index].required} onChange={(e) => {
-              ctx.setedit(true)
-              let survey = [...ctx.surveys]
-              survey[index] = {...ctx.surveys[index] , required:e.target.checked}
-              ctx.setsurveys(survey)
-              setrequired(e.target.checked)}}/>}
-            label={"Required"}
-            />
-          </FormControl>
+          <FormControlLabel
+          control={<RedSwitch checked={ctx.surveys[index].required} onChange={(e) => {
+            ctx.setedit(true)
+            let survey = [...ctx.surveys]
+            survey[index] = {...ctx.surveys[index] , required:e.target.checked}
+            ctx.setsurveys(survey)
+            setrequired(e.target.checked)}}/>}
+          label={"Required"}
+          />
+        </FormControl>
+          
+          }
+          
           </div>
 }
 

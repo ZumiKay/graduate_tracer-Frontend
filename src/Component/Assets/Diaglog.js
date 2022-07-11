@@ -1,6 +1,6 @@
 import { FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import {solid} from '@fortawesome/fontawesome-svg-core/import.macro' 
-import { Button, TextField } from '@mui/material'
+import { Box, Button, LinearProgress, TextField } from '@mui/material'
 import axios from 'axios'
 import React, { useContext, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
@@ -18,7 +18,8 @@ const Diaglog = ({open}) => {
       ctx.setsurveys([])
       ctx.setshowdialog(true)
    }, [])
-   const handleCreate = () => {
+   const handleCreate = (e) => {
+      e.preventDefault()
       if(formtitle !== '') {
       axios({
          method:"POST",
@@ -44,7 +45,7 @@ const Diaglog = ({open}) => {
       }
    }
   return (
-    <div className='Dialog__Container'>
+    <form className='Dialog__Container'>
       <header className='Dialog__header'>
          <h1>Create New Survey</h1>
       </header>
@@ -54,13 +55,10 @@ const Diaglog = ({open}) => {
        </div>
     <div className='button__Container'>
         
-        <Button onClick={handleCreate} variant='contained'>Create</Button> 
-        <Button onClick={() =>{
-         
-          window.location.reload()
-          }}>Cancel</Button>
+        <Button onClick={handleCreate} type="submit" variant='contained'>Create</Button> 
+        <Button onClick={() =>{window.location.reload()}}>Cancel</Button>
         </div>
-    </div>
+    </form>
   )
 }
 
@@ -94,7 +92,9 @@ export const FormDiaglog = (props) => {
 
    }
    const handleSend = async () => {
+      ctx.setisloading({...ctx.isloading , send:true})
       if(emaildata.reciever === '' || emaildata.subject === '' || emaildata.message === ''){
+         ctx.setisloading({...ctx.isloading , send:false})
          seterr("Please Fill All Info")
       } else {
          seterr('')
@@ -106,12 +106,15 @@ export const FormDiaglog = (props) => {
                Link: `${env.web_url}/p/${data._id}`
             } , env.public_key)
          })
+         ctx.setisloading({...ctx.isloading , send:false})
          seterr("Email Sent") 
       }
    }
    return (
    <div className='Form_DialogContainer'>
-      
+      {ctx.isloading.send && <Box sx={{width:"100%"}}>
+         <LinearProgress/>
+      </Box>}
       <h4>Send Form</h4>
       <p style={{color:"red"}}>{errmess}</p>
       <div className='nav_bar'>
