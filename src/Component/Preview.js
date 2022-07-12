@@ -11,6 +11,7 @@ import '../Style/style.css'
 import Checkbox, { RadioButton, Yearpicker } from './Assets/Checkbox'
 import { Topnavbar } from './Assets/NavBar'
 import publicIp from 'react-public-ip'
+import { LoadingLogo } from './Home'
 
 
 const Preview = ({data}) => {
@@ -18,7 +19,6 @@ const Preview = ({data}) => {
   const {id} = useParams()
   const [surdata , setdata] = useState({})
   const [errmess , setmess] = useState('')
-  const [val , setval] = useState('')
   const [submitted , setsubmited] = useState(false)
   
   useEffect(() => {
@@ -30,8 +30,6 @@ const Preview = ({data}) => {
   } , [data])
   const initail = () => {
     let sur = data.filter(({_id}) => _id === id)
-    console.log(sur)
-    console.log(ctx.Useranswer)
     if(sur.length > 0) {
       sur.map(i => setdata(i))
     } 
@@ -145,6 +143,7 @@ const handleSubmit = (e) => {
   
   return (
     <>
+    {ctx.isloading.home && <LoadingLogo/>}
    <Topnavbar data={surdata}/>
     <div className='Preview__Container'>
    
@@ -176,7 +175,7 @@ const handleSubmit = (e) => {
     {JSON.stringify(surdata) !== '{}' && <Button type="submit" onClick={(e) => handleSubmit(e)} style={{color:"black",width:"100px" ,backgroundColor:"lightsteelblue"}} variant='contained'>Submit</Button>}
     
     </>}
-      {JSON.stringify(surdata) === '{}' && <h3>URL NOT EXIST</h3>}
+     
       <p>Graduate Tracer Survey by Zumi and Norack</p>
       <p>R2022</p>
     </div>
