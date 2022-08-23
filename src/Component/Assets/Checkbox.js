@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef, useState } from 'react'
+import React, { useContext, useRef, useState } from 'react'
 import '../../Style/style.css'
 import Select from '@mui/material/Select'
 import MenuItem from '@mui/material/MenuItem';
@@ -16,10 +16,9 @@ import { LocalizationProvider } from '@mui/x-date-pickers';
 
 const Checkbox = (props) => {
     const ctx = useContext(TracerContext)
-    const {label , width , index , index1 , id} = props
+    const {label , width , index , index1} = props
     const ref = useRef()
     const location = useLocation()
-    const [ansset , setans] = useState([])
     const handleDelete = () => {
         const surveys = [...ctx.surveys]
         
@@ -60,8 +59,6 @@ export default Checkbox
 export const RadioButton = (props) => {
     const {label , index , index1} = props
     const ctx = useContext(TracerContext)
-    const [value , setvalue] = useState('')
-    const [check , setcheck] = useState({})
     const ref = useRef()
     const location = useLocation()
   
@@ -69,7 +66,7 @@ export const RadioButton = (props) => {
         let answer ={ ...ctx.Useranswer} 
         answer.Response[index].response = e.target.value 
         ctx.setanswer(answer)
-        setvalue(e.target.value)
+        
        
     }
     const handleDelete = () => {
@@ -112,10 +109,11 @@ export const RadioButton = (props) => {
             }
         })
         ctx.setsurveys(sur)
+        ctx.setedit(true)
 
     }
     return (
-        <div onClick={() => console.log(check)}  onChange={handleChange} className="radio__Wrapper">
+        <div onChange={handleChange} className="radio__Wrapper">
            {env.auth && env.auth.accessToken  && !location.pathname.includes('/p') &&  
            <div style={{display:"flex" , flexDirection:"row-reverse" , alignItems:"center"}}>
             <FontAwesomeIcon onClick={() =>{

@@ -14,6 +14,7 @@ export const Contexts = ({children}) => {
     const [check , setcheck] = useState({})
     const [Useranswer , setanswer] = useState({})
     const [checkbox, setcheckbox] = useState({})
+    const [j , setj] = useState(0)
     const [isloading , setisloading] = useState({
         home: false ,
         user:false ,
@@ -24,6 +25,8 @@ export const Contexts = ({children}) => {
     
     return( <TracerContext.Provider
         value={{
+            j,
+            setj,
             showactive,
             setshowactive,
             surveys ,

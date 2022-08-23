@@ -82,6 +82,8 @@ export const SurveyItem = (props) => {
   const ref = useRef()
   
   
+  
+  
   useEffect(() => {
     window.addEventListener("mousedown", disableedit)
     
@@ -166,17 +168,21 @@ export const SurveyItem = (props) => {
   }
   const handleDelete = (index) => {
     const survey = [...ctx.surveys]
-    survey.map((i , index3) => {
-      if(i.belongTo) {
-        if(i.belongTo.qindex === index){
-         
-          survey.splice(index + 1 , survey[index].Answer.length)
-          
+    let k = 0
+   
+   survey.map((i , index3) => {
+     if(i.belongTo) {
+       if(i.belongTo.qindex === index){
+         k++
+         survey.splice(index, 1)
+        }
+        if (i.belongTo.qindex > index) {
+          i.belongTo.qindex -= k + 1 
         }
       }
-      
     }) 
-    survey.splice(index , 1)
+    
+    survey.splice(index , k === 0 ? 1 : k)
     ctx.setsurveys(survey)
     ctx.setedit(true)
   }
@@ -209,7 +215,10 @@ export const SurveyItem = (props) => {
   
   return (
     <div key={index} ref={ref} onClick={() => setshowedit(true)} className='surveyitem__Container'>
+      
+        {ctx.surveys[index].belongTo && <p>Extend From Question {ctx.surveys[index].belongTo.qindex + 1}</p>}
         <div className='surveyitem_header'>
+         <span>{index + 1}</span>
           <input type="text"  id="question" value={ctx.surveys[index].Question} onChange={handleChange(index , 'Question')}   placeholder='Question' />
           {showedit &&<> <select value={ctx.surveys[index]?.type} onChange={handleChange(index , 'type')} className='form-select form-select-sm' id="type">
            
@@ -255,8 +264,8 @@ export const SurveyItem = (props) => {
           <FormControl component="fieldset" variant="standard">
           <FormControlLabel
           control={<RedSwitch checked={ctx.surveys[index].required} onChange={(e) => {
-            ctx.setedit(true)
             let survey = [...ctx.surveys]
+            ctx.setedit(true)
             survey[index] = {...ctx.surveys[index] , required:e.target.checked}
             ctx.setsurveys(survey)
             setrequired(e.target.checked)}}/>}

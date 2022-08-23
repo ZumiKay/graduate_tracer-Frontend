@@ -155,8 +155,8 @@ const handleSubmit = (e) => {
         return <RealSurvey index={index} data={item}/>
       } else {
         let ans = {}
-        ctx.Useranswer.Response?.map((i) => {
-          if(i.response === item.belongTo.ans){
+        ctx.Useranswer.Response?.map((i, index3) => {
+          if(i.response === item.belongTo.ans && index3 === item.belongTo.qindex){
            ans = item
           }
         })

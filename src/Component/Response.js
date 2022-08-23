@@ -1,4 +1,4 @@
-import { Button } from '@mui/material'
+import { Box, Button, LinearProgress } from '@mui/material'
 import axios from 'axios'
 import React, { useState } from 'react'
 import { useEffect } from 'react'
@@ -9,6 +9,7 @@ const Response = ({data , close , showreport}) => {
     const [useranswer , setanswer] = useState([])
     const [tabledata , setdata] = useState([])
     const [showtable , setshowtable] = useState(false)
+    const [loading , setloading] = useState(true)
     useEffect(() => {
         getAnswer()
     } , [data])
@@ -18,7 +19,7 @@ const Response = ({data , close , showreport}) => {
             url:env.API_URL + "/getanswer/" + data._id,
             headers:{"x-access-token": env.auth.accessToken}
         }).then((res) => {
-            console.log(res.data.answer)
+            setloading(false)
             setdata(res.data.answer)
             let obj = []
             data.contents.forEach((item) => {
@@ -36,12 +37,14 @@ const Response = ({data , close , showreport}) => {
                )
             })
             setanswer(obj)
-        })
+        }).catch((err) => setloading(true))
     }
   return (
     <div className='response__Container'>
-       
         <h1>{data.title}</h1>
+        {loading && <Box sx={{width:'100%'}}>
+            <LinearProgress/>
+        </Box>}
         <div className='response_btn'>
         {showtable ? <Button onClick={() => setshowtable(false)}>Back</Button> : <Button variant="contained" onClick={() => setshowtable(true)}>Table View</Button>}
         <Button variant='contained' onClick={() => close({...showreport , [data.title]:false})}>Close</Button>
