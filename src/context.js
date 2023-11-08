@@ -15,6 +15,7 @@ export const Contexts = ({children}) => {
     const [Useranswer , setanswer] = useState({})
     const [checkbox, setcheckbox] = useState({})
     const [j , setj] = useState(0)
+    const auth =  JSON.parse(localStorage.getItem('auth'))
     const [isloading , setisloading] = useState({
         home: false ,
         user:false ,
@@ -48,7 +49,8 @@ export const Contexts = ({children}) => {
             checkbox ,
             setcheckbox ,
             isloading ,
-            setisloading
+            setisloading , 
+            auth
 
             
            

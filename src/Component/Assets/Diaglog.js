@@ -13,7 +13,6 @@ const Diaglog = ({open}) => {
    const ctx = useContext(TracerContext)
    const [formtitle , setform] = useState('')
    const [err , seterr] = useState('')
-   const auth = JSON.parse(localStorage.getItem("auth"))
    let navigate = useNavigate()
    useEffect(() => {
       ctx.setsurveys([])
@@ -26,26 +25,29 @@ const Diaglog = ({open}) => {
          method:"POST",
          url:env.API_URL + "/createForm",
          data: {title : formtitle , 
-            content: [
-              
-            ]
+            content: []
          },
          headers : {
-            "x-access-token" : auth.accessToken 
+            "x-access-token" : env.auth.accessToken
          }
       }).then((res) => {
-         ctx.setopen(false)
-        navigate(`/form/${res.data.data._id}` ,  {replace:true})
-        window.location.reload()
-
+        ctx.setopen(false)
+        handleClose()
+      //   navigate(`/form/${res.data.data._id}` ,  {replace:true})
+        window.location.href = `/form/${res.data.data._id}`
       }).catch(error => {
-         seterr(error.response.data.message)
+         toast.error(error.response.data.message , {autoClose: 2000})
       }) 
    } else {
          seterr('Please Enter the Title')
       }
    }
+   const handleClose = () => {
+      open(false)
+      ctx.setshowdialog(false)
+   }
   return (
+   <div className="Dialog__Wrapper">
     <form className='Dialog__Container'>
       <header className='Dialog__header'>
          <h1>Create New Survey</h1>
@@ -57,9 +59,10 @@ const Diaglog = ({open}) => {
     <div className='button__Container'>
         
         <Button onClick={handleCreate} type="submit" variant='contained'>Create</Button> 
-        <Button onClick={() =>{window.location.reload()}}>Cancel</Button>
+        <Button onClick={() => handleClose()}>Cancel</Button>
         </div>
     </form>
+    </div>
   )
 }
 
@@ -171,6 +174,7 @@ export const FormDiaglog = (props) => {
 }
 
 export const AddStudents = ({open , setOpen , data}) => {
+   const ctx = useContext(TracerContext)
    const [studentdata , setdata] = useState({
       name: data ? data.name : '',
       email: data ? data.email : '',
@@ -190,20 +194,22 @@ export const AddStudents = ({open , setOpen , data}) => {
     const handleSubmit = () => {
       if(!data) {
          if(studentdata.name !== '' && studentdata.email !== '') {
-         
+            ctx.setisloading({...ctx.isloading , user: true})
             axios({
                method:"POST" ,
                url: env.API_URL + "/register",
                data:studentdata , 
                headers:{"x-access-token" : env.auth.accessToken}
             }).then(() => {
+               ctx.setisloading({...ctx.isloading , user: false})
                toast.success("Group Added" , {
                   autoClose: 2000,
                   pauseOnHover:true,
                   onClose: () => window.location.reload()
                })
             }).catch((err) => {
-               errmes(err.response.data.message)
+               ctx.setisloading({...ctx.isloading , user: false})
+               toast.error(err.response.data.message , {autoClose:2000})
             })
    
          } else {
@@ -211,6 +217,7 @@ export const AddStudents = ({open , setOpen , data}) => {
          }
 
       } else {
+         ctx.setisloading({...ctx.isloading , user: true})
          axios({
             method:"PUT" ,
             url:env.API_URL + "/updatestudent",
@@ -220,12 +227,14 @@ export const AddStudents = ({open , setOpen , data}) => {
             } ,
             headers:{"x-access-token" : env.auth.accessToken}
          }).then(() => {
+            ctx.setisloading({...ctx.isloading , user: false})
             toast.success("Updated Successful" , {
                autoClose:2000,
                pauseOnHover:true,
                onClose:() => window.location.reload()
             })
          }).catch((err) => {
+            ctx.setisloading({...ctx.isloading , user: false})
             console.log(err)
          })
 

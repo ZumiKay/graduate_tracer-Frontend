@@ -16,7 +16,7 @@ export const NavIcons = [{
     },
     {
         url: "https://firebasestorage.googleapis.com/v0/b/graduatetracer-f72fa.appspot.com/o/User.png?alt=media&token=437a3d23-f0df-42c4-bf61-77f5962ad56d",
-        name: "Users",
+        name: "Emails",
         route: "users"
     }
 

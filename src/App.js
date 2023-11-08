@@ -35,7 +35,7 @@ function App() {
     } else {
       sethide(true)
     }
-   getForm()
+   
    if(window.innerWidth < 500) {
     sethidenav(true)
   } else {
@@ -49,6 +49,7 @@ function App() {
     
  
   } , [location.pathname])
+  useEffect(() => getForm() , [])
   const resizewidth = () => {
     if(window.innerWidth < 500) {
       sethidenav(true)

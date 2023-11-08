@@ -1,7 +1,7 @@
 import { Button } from '@mui/material'
 import axios from 'axios'
 import React, { useContext, useEffect, useState } from 'react'
-import { ToastContainer } from 'react-toastify'
+import { ToastContainer, toast } from 'react-toastify'
 import { TracerContext } from '../context'
 import { env } from '../environment'
 import '../Style/style.css'
@@ -14,21 +14,25 @@ const Usermanagement = () => {
     const [val , setval] = useState(null)
     const ctx = useContext(TracerContext)
     const [users , setuser] = useState([])
+    
     useEffect(() => {
         ctx.setshowactive({"Users": true})
         getUser()
     } , [])
    const getUser = () => {
     ctx.setisloading({...ctx.isloading , user:true})
+    
     axios({
         method:"GET",
         url:env.API_URL + "/getstudent",
         headers:{
-            "x-access-token": env.auth.accessToken
+            "x-access-token": env.auth.accessToken 
         }
     }).then(res => {
         ctx.setisloading({...ctx.isloading , user:false})
         setuser(res.data.student)
+    }).catch(err => {
+        ctx.setisloading({...ctx.isloading , user:false})
     })
    
    } 
@@ -44,21 +48,29 @@ const Usermanagement = () => {
             "x-access-token": env.auth.accessToken
         }
     }).then(() => {
-        
-        window.location.reload()})
+        ctx.setisloading({...ctx.isloading , user:false})
+        window.location.reload()
+    }).catch((err) => {
+        ctx.setisloading({...ctx.isloading , user:false})
+        toast.error(err.response.data.message , {autoClose: 2000})
+    })
 }
 const handleEdit = (data) => {
     setedit(true)
     setval(data)
 }
   return (
-    <>
+    <div style={ctx.isloading.user ? {opacity:".5"} : {opacity:"1"}} className='user_Container'>
+    {ctx.isloading.user && <LoadingLogo/>}
     <ToastContainer/>
+    <div className='btn_usermanagement'>
     {open && <AddStudents open={open} setOpen={setOpen}/>}
     {edit && <AddStudents open={edit} setOpen={setedit} data={val}/>}
-    {ctx.isloading.user && <LoadingLogo/>}
-    <div style={ctx.isloading.user ? {opacity:".5"} : {opacity:"1"}} className='user_Container'>
-        <h1>List of Users</h1>
+    </div>
+    
+    
+   
+        <h1>List of Emails</h1>
         <Button className='add-btn' onClick={() => setOpen(true)} variant='contained'>Add Students</Button>
         <table className='user_table'>
             <thead className='usertable_header'>
@@ -84,7 +96,7 @@ const handleEdit = (data) => {
             </tbody>
         </table>
     </div>
-    </>
+    
   )
 }
 

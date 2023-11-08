@@ -35,10 +35,15 @@ const NavBar = ({setclose}) => {
     }
   }
   const handleLogout = async () => {
+    ctx.setisloading({...ctx.isloading , logout: true})
     await axios({
-      method:"GET",
-      url:env.API_URL + "/logout"
+      method:"POST",
+      url:env.API_URL + "/logout",
+      data: {
+        refreshToken: env.auth.refreshToken
+      }
     }).then(() => {
+      ctx.setisloading({...ctx.isloading , logout: false})
       localStorage.removeItem('auth')
       navigate("/" , {replace:true})
     })
@@ -118,14 +123,17 @@ export const Topnavbar = ({data}) => {
       }
     }).then(() => {
       ctx.setisloading({...ctx.isloading , save:false})
-      toast.info("Saved" , {
+      toast.success("Saved" , {
         position:"top-right",
         autoClose:1000,
         hideProgressBar: true,
         closeOnClick: true,
         pauseOnHover: true,
        })
-    }).catch((err) => console.log(err))
+    }).catch((err) => {
+      console.log(err)
+      ctx.setisloading({...ctx.isloading , save:false})
+    })
    }
    const handlenewTap = (url) => {
       const newTab = window.open(url , '_blank', 'noopener,noreferrer')
