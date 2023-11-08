@@ -54,10 +54,10 @@ const NavBar = ({setclose}) => {
   return (
     <>
     <div className='Nav_Container'>
-      <header className='Nav_Header'>
+      { !showclose && <header className='Nav_Header'>
         <img onClick={() => navigate('/' , {replace:true})} src={Assetimg.Logo} alt="Logo" />
-      </header>
-      {showclose && <Button onClick={() => setclose(true)}>Close</Button>}
+      </header>}
+      {showclose && <button className='close_nav' onClick={() => setclose(true)}>CLOSE</button>}
       {NavIcons.map(icon => (
        <div className='navLink_Container'>
        { icon.name !== 'CreateSurvey' ? <Link className='nav_Link' to={'/' + icon.route}>
@@ -71,6 +71,7 @@ const NavBar = ({setclose}) => {
 
           } else {
             setopen(true)
+            document.body.style.overflow = 'hidden'
           }
           }} className='title_Link'>{icon.name}</p>
         </div>

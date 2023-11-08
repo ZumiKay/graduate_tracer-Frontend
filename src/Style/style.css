@@ -30,8 +30,8 @@
   z-index: 100;
   font-family: "Prompt", sans-serif;
   transition: 0.4s;
-  overflow-y: hidden;
-  animation: slidein 1s ease;
+  overflow: hidden;
+  animation: slidein 0.3s ease;
 }
 .Nav_Container:hover, .Nav_Container:active {
   width: 220px;
@@ -43,6 +43,24 @@
   width: 150px;
   text-align: left;
   display: block;
+}
+.Nav_Container .close_nav {
+  background-color: black;
+  font-weight: 700;
+  padding: 5px;
+  width: 100%;
+  position: relative;
+  top: 20px;
+  font-size: 10px;
+  left: -3px;
+  border: 0;
+  color: white;
+  border-radius: 10px;
+  transition: 0.5s;
+}
+.Nav_Container .close_nav:hover, .Nav_Container .close_nav:active {
+  background-color: white;
+  color: white;
 }
 .Nav_Container .create_Link {
   cursor: pointer;
@@ -107,6 +125,12 @@
 .Nav_Container .hover_detail p {
   position: relative;
   top: 15px;
+}
+@media screen and (max-width: 500px) {
+  .Nav_Container {
+    height: 84.5%;
+    top: 12%;
+  }
 }
 @keyframes fadein {
   from {
@@ -182,6 +206,11 @@
     margin-left: 100px;
   }
 }
+@media screen and (max-width: 500px) {
+  .Home__Container .AllForm_Container {
+    margin-left: 0;
+  }
+}
 .Home__Container .Home__Header {
   color: black;
   font-size: 40px;
@@ -192,18 +221,15 @@
   top: 0;
   padding: 20px;
 }
-@media screen and (max-width: 1111px) {
+@media screen and (max-width: 860px) {
   .Home__Container .Home__Header {
-    padding-left: 100px;
-    text-align: left;
+    position: relative;
+    right: 0;
+    text-align: right;
+    font-size: 35px;
   }
 }
-@media screen and (max-width: 750px) {
-  .Home__Container .Home__Header {
-    font-size: 40px;
-  }
-}
-@media screen and (max-width: 600px) {
+@media screen and (max-width: 715px) {
   .Home__Container .Home__Header {
     font-size: 30px;
   }
@@ -247,6 +273,11 @@
   .Home__Container .Summary__Section .Summary__Container {
     width: 250px;
     height: 150px;
+  }
+}
+@media screen and (max-width: 500px) {
+  .Home__Container .Summary__Section .Summary__Container {
+    margin-left: 0;
   }
 }
 
@@ -308,12 +339,31 @@
   z-index: 90;
   background-color: #F0F4FA;
 }
+@media screen and (max-width: 500px) {
+  .topnav_Container {
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    padding-left: 30px;
+  }
+}
 .topnav_Container .title__header {
   position: relative;
   left: 100px;
+  height: 100%;
+  width: 50%;
+  max-width: 1000px;
+}
+@media screen and (max-width: 500px) {
+  .topnav_Container .title__header {
+    width: 70%;
+    text-align: left;
+  }
 }
 .topnav_Container .title__header h1 {
-  white-space: nowrap;
+  max-width: 800px;
+  word-break: break-all;
+  height: 100%;
 }
 @media screen and (max-width: 800px) {
   .topnav_Container .title__header h1 {
@@ -326,7 +376,7 @@
   flex-direction: row;
   column-gap: 20px;
 }
-@media screen and (max-width: 760px) {
+@media screen and (max-width: 900px) {
   .topnav_Container .send_Container {
     margin-right: 20px;
   }
@@ -334,6 +384,18 @@
     width: 30px;
     height: 30px;
     font-size: 10px;
+  }
+}
+@media screen and (max-width: 600px) {
+  .topnav_Container .send_Container {
+    flex-direction: column;
+    row-gap: 20px;
+  }
+}
+@media screen and (max-width: 500px) {
+  .topnav_Container .send_Container {
+    flex-direction: row;
+    padding-left: 35%;
   }
 }
 .topnav_Container .notifi__Container {
@@ -436,13 +498,13 @@
   align-items: center;
   row-gap: 30px;
   background-color: white;
-  height: 94vh;
+  height: 100%;
   overflow-y: auto;
 }
 
 .surveyitem__Container {
   background-color: #F0F4FA;
-  width: 50%;
+  width: 700px;
   display: flex;
   flex-direction: column;
   align-items: left;
@@ -451,10 +513,31 @@
   border-radius: 10px;
   margin-bottom: 10px;
   margin-top: 20px;
+  height: 100%;
+  overflow-y: hidden;
 }
-@media screen and (max-width: 1160px) {
+@media screen and (max-width: 900px) {
   .surveyitem__Container {
-    width: 70%;
+    min-height: 200px;
+    margin-left: 10%;
+  }
+}
+@media screen and (max-width: 800px) {
+  .surveyitem__Container {
+    width: 600px;
+    overflow-x: auto;
+  }
+}
+@media screen and (max-width: 700px) {
+  .surveyitem__Container {
+    width: 80%;
+    overflow-x: auto;
+  }
+}
+@media screen and (max-width: 500px) {
+  .surveyitem__Container {
+    width: 100%;
+    overflow-x: auto;
   }
 }
 .surveyitem__Container .surveyitem_header {
@@ -485,6 +568,7 @@
   margin-left: 30px;
   width: 90%;
   text-align: center;
+  height: max-content;
 }
 .surveyitem__Container .answer__contianer .answer__item {
   display: grid;
@@ -519,9 +603,14 @@
   flex-direction: row-reverse;
   justify-content: center;
   column-gap: 10px;
+  width: 250px;
+  height: 100%;
+  max-width: 300px;
 }
 .checkbox__Asset .title {
-  height: fit-content;
+  width: 300px;
+  word-break: break-all;
+  height: 100%;
   text-align: left;
 }
 .checkbox__Asset .Checkbox__Container {
@@ -581,10 +670,15 @@
   flex-direction: row-reverse;
   justify-content: left;
   column-gap: 10px;
+  height: 100%;
+  max-height: 200px;
 }
 .radio__Wrapper .radio__label {
   text-align: left;
-  width: 100%;
+  width: 200px;
+  height: 100%;
+  max-width: 250px;
+  word-break: break-all;
 }
 .radio__Wrapper .radio__Container {
   display: block;
@@ -726,7 +820,7 @@
   font-family: "Prompt", sans-serif;
   row-gap: 100px;
   position: absolute;
-  top: 25%;
+  transform: translate(50%, 40%);
   left: 200px;
   background-color: #F0F4FA;
   z-index: 100;
@@ -750,6 +844,11 @@
   flex-direction: column;
   row-gap: 20px;
 }
+@media screen and (max-width: 950px) {
+  .Dialog__Wrapper .Dialog__Container {
+    transform: translate(10%, 20%);
+  }
+}
 @media screen and (max-width: 750px) {
   .Dialog__Wrapper .Dialog__Container {
     left: 150px;
@@ -757,10 +856,23 @@
 }
 @media screen and (max-width: 700px) {
   .Dialog__Wrapper .Dialog__Container {
+    transform: translate(-30%, 20%);
+  }
+}
+@media screen and (max-width: 500px) {
+  .Dialog__Wrapper .Dialog__Container {
+    transform: translate(0, 0);
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+}
+@media screen and (max-width: 500px) {
+  .Dialog__Wrapper {
     position: fixed;
     width: 100%;
     height: 100%;
-    left: 0;
     top: 0;
   }
 }
@@ -842,7 +954,7 @@
 
 .report__Container {
   width: 100%;
-  height: 100vh;
+  min-height: 100vh;
   font-family: "Prompt", sans-serif;
   background-color: #F0F4FA;
   overflow-y: auto;
@@ -868,45 +980,62 @@
     width: 700px;
   }
 }
-.report__Container .table_Container {
-  position: relative;
+.report__Container .report_header .search_report {
+  background-color: white;
+  border: 0;
+  border-radius: 10px;
+  width: 30%;
+}
+.report__Container .scroll_table {
+  width: 100%;
+  text-align: left;
+  min-height: 500px;
+  max-height: 600px;
+  overflow-y: auto;
+  margin-top: 30px;
+}
+.report__Container .scroll_table .table_Container {
   border-collapse: collapse;
-  width: 70%;
   min-width: 700px;
   border-spacing: 0;
   margin-left: 300px;
   margin-top: 30px;
-  background-color: #F0F4FA;
-  border-radius: 12px;
-  box-shadow: 1px 1px 4px 1px gray;
+  background-color: white;
 }
 @media screen and (max-width: 1400px) {
-  .report__Container .table_Container {
+  .report__Container .scroll_table .table_Container {
     margin-left: 150px;
     width: 80%;
   }
 }
-.report__Container .table_Container .table_Head {
+.report__Container .scroll_table .table_Container .table_Head {
   padding: 10px;
   border-bottom: 1px solid black;
-  font-size: x-large;
+  font-size: 15px;
+  position: relative;
+  top: 0;
 }
-.report__Container .table_Container .table_Head th {
+.report__Container .scroll_table .table_Container .table_Head th {
   position: sticky;
   top: 0;
   background-color: #354259;
   color: #F0F4FA;
-  padding-top: 10px;
-  padding-bottom: 20px;
+  padding: 20px;
+  font-size: 20px;
+  z-index: 10;
+  vertical-align: middle;
 }
-.report__Container .table_Container .table_body {
-  max-height: 700px;
-  overflow-y: scroll;
-}
-.report__Container .table_Container .table_body tr {
+.report__Container .scroll_table .table_Container .table_body tr {
   height: 100px;
   font-size: larger;
-  border-bottom: 1px solid black;
+  position: relative;
+  left: 20px;
+  padding: 20px;
+}
+.report__Container .scroll_table .table_Container .table_body tr td {
+  max-width: 500px;
+  word-break: break-all;
+  height: 100%;
 }
 
 .Preview__Container {

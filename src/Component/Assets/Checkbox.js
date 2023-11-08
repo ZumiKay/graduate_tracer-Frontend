@@ -89,7 +89,7 @@ export const RadioButton = (props) => {
         ctx.setedit(true)
        
     }
-    const handleRadio = (e) => {
+    const handleRadio = () => {
        
        ctx.setcheck({...ctx.check , [index]:true})
       
@@ -115,7 +115,7 @@ export const RadioButton = (props) => {
     return (
         <div onChange={handleChange} className="radio__Wrapper">
            {env.auth && env.auth.accessToken  && !location.pathname.includes('/p') &&  
-           <div style={{display:"flex" , flexDirection:"row-reverse" , alignItems:"center"}}>
+           <div className='extend__con'>
             <FontAwesomeIcon onClick={() =>{
             ctx.setedit(true)
             handleDelete()}} icon={solid('multiply')}/>

@@ -45,6 +45,7 @@ const Diaglog = ({open}) => {
    const handleClose = () => {
       open(false)
       ctx.setshowdialog(false)
+      document.body.style.overflow = 'auto'
    }
   return (
    <div className="Dialog__Wrapper">

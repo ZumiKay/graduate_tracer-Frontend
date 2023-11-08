@@ -60,9 +60,9 @@ const Report = ({data}) => {
     <div className='report__Container'>
       <div className="report_header">
         <h3>Report</h3>
-        <TextField onChange={handleFilter} label={"Search"}/>
+        <TextField onChange={handleFilter} label={"Search"} className='search_report'/>
       </div>
-      
+      <div className='scroll_table'>
       <table className='table_Container'>
         <thead className='table_Head'>
           <th>SURVEYS</th>
@@ -74,8 +74,8 @@ const Report = ({data}) => {
          
           {(filter ? filterdata : data).map((item) => (
             <>
-            <tr>
-            <td>{item.title}</td>
+            <tr className='title_row'>
+            <td className='title'>{item.title}</td>
             
             <td>
               <Button onClick={() => {
@@ -93,6 +93,7 @@ const Report = ({data}) => {
           
         </tbody>
       </table>
+      </div>
       
       {data.map(item => (
         showreport[item.title] && <Response showreport={showreport} close={setreport} data={item}/>
