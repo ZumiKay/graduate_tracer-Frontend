@@ -5,7 +5,7 @@ import { TracerContext } from '../context';
 import { env } from '../environment';
 import '../Style/style.css';
 import { Assetimg } from './Assets/Image/Images';
-
+import Cookie from 'js-cookie'
 const Authentication = () => {
     const ctx = useContext(TracerContext);
     const [userdata, setuserdata] = useState({
@@ -26,8 +26,8 @@ const Authentication = () => {
         })
             .then((res) => {
                 ctx.setisloading({...ctx.isloading , login: false})
-                localStorage.setItem('auth', JSON.stringify(res.data));
-                if(res.status === 200) {
+                Cookie.set("auth" , JSON.stringify(res.data) , {expires: 7})
+                 if(res.status === 200) {
                   window.location.reload()
                 }
             })

@@ -176,8 +176,8 @@ const handleSubmit = (e) => {
     
     </>}
      
-      <p>Graduate Tracer Survey by Zumi and Norack</p>
-      <p>R2022</p>
+      <p>Graduate Tracer Survey by Zumi</p>
+      <p>2022</p>
     </div>
     </>
   )

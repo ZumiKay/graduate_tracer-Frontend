@@ -1,15 +1,22 @@
-import React, { useContext, useEffect } from 'react'
+import React, { useContext, useEffect, useRef } from 'react'
 import { TracerContext } from '../context'
 import '../Style/style.css'
 import { Link } from 'react-router-dom'
 import { Assetimg } from './Assets/Image/Images'
 const Home = ({survey}) => {
   const ctx = useContext(TracerContext)
+  
   useEffect(() => {
     ctx.setshowactive({'Home':true})
     ctx.settitle('')
 
+
+
   } , [])
+
+
+
+
   return (
     <>
     {ctx.isloading.home && <LoadingLogo/>}

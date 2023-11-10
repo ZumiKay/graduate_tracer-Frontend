@@ -69,9 +69,12 @@ const handleEdit = (data) => {
     </div>
     
     
-   
-        <h1>List of Emails</h1>
+        <div className='user_header'>
+        <h1>Group of Emails</h1>
         <Button className='add-btn' onClick={() => setOpen(true)} variant='contained'>Add Students</Button>
+        </div>
+
+       <div className='usertable_wrapper'>
         <table className='user_table'>
             <thead className='usertable_header'>
                 <th>GroupName</th>
@@ -95,6 +98,7 @@ const handleEdit = (data) => {
                
             </tbody>
         </table>
+        </div>
     </div>
     
   )

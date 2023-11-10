@@ -4,7 +4,7 @@ import NavBar from './Component/Assets/NavBar';
 import Form from './Component/Form';
 import Home from './Component/Home';
 import Authentication from './Component/Authentication';
-import { useState, useEffect, useContext } from 'react';
+import { useState, useEffect, useContext, useRef } from 'react';
 import PrivateRoute from './PrivateRoute';
 import axios from 'axios';
 import { env } from './environment';
@@ -17,9 +17,9 @@ import { TracerContext } from './context';
 function App() {
     const [hide, sethide] = useState(false);
     const [hidenav, sethidenav] = useState(false);
+    const logoref = useRef(null)
     const [hidelogo, sethidelogo] = useState(false);
     const [survey, setsurvey] = useState([]);
-    const auth = JSON.parse(localStorage.getItem('auth'));
     const location = useLocation();
     const ctx = useContext(TracerContext);
     useEffect(() => {
@@ -31,15 +31,18 @@ function App() {
         }
 
         window.addEventListener('resize', resizewidth);
-
+       
         return () => {
             window.removeEventListener('resize', resizewidth);
+            
         };
     }, [location.pathname]);
     useEffect(() => {
+        if(env.auth) {
         getForm();
-        resizewidth();
+        resizewidth();}
     }, []);
+    
     const resizewidth = () => {
         if (window.innerWidth < 500) {
             sethidenav(true);
@@ -55,7 +58,7 @@ function App() {
             method: 'get',
             url: env.API_URL + '/getform',
             headers: {
-                'x-access-token': auth?.accessToken
+                'x-access-token': env.auth.accessToken
             }
         })
             .then((res) => {
@@ -66,17 +69,18 @@ function App() {
     };
     return (
         <div className="App">
-            {auth?.accessToken ? (
+            {env.auth?.accessToken ? (
                 <>
                     {hide ? (
                         <>
                             {' '}
-                            {!hidenav && (
+                            {(!hidenav) && (
                                 <>
-                                    <NavBar setclose={sethidenav} />
+                                    <NavBar logoref={logoref} setclose={sethidenav} />
                                 </>
                             )}
-                            {hidelogo && <img onClick={() => sethidenav(false)} className="Logo_nav" src={Assetimg.Logo} alt="logo" />}
+                            {hidelogo && <img ref={logoref}  onClick={() => {
+                                sethidenav(false)}} className="Logo_nav" src={Assetimg.Logo} alt="logo" />}
                         </>
                     ) : (
                         <></>
@@ -89,8 +93,8 @@ function App() {
                 <Route
                     path="/"
                     element={
-                        auth?.accessToken ? (
-                            <PrivateRoute redirectPath={'/'} isAllowed={auth?.accessToken}>
+                        env.auth.accessToken ? (
+                            <PrivateRoute redirectPath={'/'} isAllowed={env.auth.accessToken}>
                                 <Home survey={survey} />
                             </PrivateRoute>
                         ) : (
@@ -103,7 +107,7 @@ function App() {
                         <Route
                             path={`/form/${item._id}`}
                             element={
-                                <PrivateRoute redirectPath={'/'} isAllowed={auth?.accessToken}>
+                                <PrivateRoute redirectPath={'/'} isAllowed={env.auth.accessToken}>
                                     <Form data={item} />
                                 </PrivateRoute>
                             }
@@ -114,7 +118,7 @@ function App() {
                 <Route
                     path="/report"
                     element={
-                        <PrivateRoute redirectPath={'/'} isAllowed={auth?.accessToken}>
+                        <PrivateRoute redirectPath={'/'} isAllowed={env.auth.accessToken}>
                             <Report data={survey} />
                         </PrivateRoute>
                     }
@@ -123,7 +127,7 @@ function App() {
                     exact
                     path="/users"
                     element={
-                        <PrivateRoute redirectPath={'/'} isAllowed={auth?.accessToken}>
+                        <PrivateRoute redirectPath={'/'} isAllowed={env.auth.accessToken}>
                             <Usermanagement />
                         </PrivateRoute>
                     }

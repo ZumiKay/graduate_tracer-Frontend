@@ -8,28 +8,39 @@ import { env } from '../../environment'
 import Diaglog, { FormDiaglog } from './Diaglog'
 import { Button } from '@mui/material'
 import { toast } from 'react-toastify'
+import Cookies from 'js-cookie'
 
-const NavBar = ({setclose}) => {
+const NavBar = ({setclose, logoref }) => {
   
   const [open , setopen] = useState(false)
   const [showclose , setshowclose] = useState(false)
+  
+  const navref = useRef(null)
   const ctx = useContext(TracerContext)
   let navigate = useNavigate()
   
   useEffect(() => {
     closebtn()
     window.addEventListener('resize' , closebtn) 
-
+   
+    
 
     return (() => {
+      window.removeEventListener('click' , handlenavref)
       window.removeEventListener("resize" , closebtn)
     })
    
   } , [])
   
+  const handlenavref = (e) => {
+    if(navref.current && logoref.current !== e.target && !navref.current.contains(e.target)) {
+      setclose(true)
+    }
+  }
   const closebtn = () => {
     if(window.innerWidth < 500) {
       setshowclose(true) 
+       window.addEventListener('click' , handlenavref)
     } else {
       setshowclose(false)
     }
@@ -44,7 +55,7 @@ const NavBar = ({setclose}) => {
       }
     }).then(() => {
       ctx.setisloading({...ctx.isloading , logout: false})
-      localStorage.removeItem('auth')
+      Cookies.remove('auth')
       navigate("/" , {replace:true})
     })
     window.location.reload()
@@ -53,7 +64,7 @@ const NavBar = ({setclose}) => {
 
   return (
     <>
-    <div className='Nav_Container'>
+    <div ref={navref} className='Nav_Container'>
       { !showclose && <header className='Nav_Header'>
         <img onClick={() => navigate('/' , {replace:true})} src={Assetimg.Logo} alt="Logo" />
       </header>}
@@ -102,12 +113,6 @@ export const Topnavbar = ({data}) => {
   const location = useLocation()
   const ctx = useContext(TracerContext)
 
-  useEffect(() => {
-    
-   
-    
-  
-   } , [data, location.pathname])
    const handleSave = () => {
     ctx.setisloading({...ctx.isloading , save:true})
     ctx.setedit(false)
@@ -151,7 +156,7 @@ export const Topnavbar = ({data}) => {
             e = window.event;
         }
         var keyCode = e.which || e.keyCode
-           
+         
     
         if (keyCode === 13 && !e.shiftKey) {
             console.log('Just enter');
